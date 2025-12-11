@@ -1,0 +1,73 @@
+# Docker Compose for KK AI Translator
+#
+# Quick Start:
+#   1. Copy .env.example to .env and fill in your Azure credentials
+#   2. Run: docker-compose up -d
+#   3. Access: http://localhost:8080
+#
+# This will start:
+#   - The translator app (API + frontend)
+#   - A MySQL database
+#
+# The database is automatically initialized and persisted in a Docker volume.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # These are baked into the frontend at build time
+        VITE_API_URL: ${VITE_API_URL:-/api/v1}
+        VITE_API_KEY: ${VITE_API_KEY:-${API_KEY:-change-me-in-production}}
+    ports:
+      - "8080:80"
+    environment:
+      # Database connection (uses the db service)
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_USER=translator
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-translator_password}
+      - MYSQL_DB=translator_db
+      # API Security
+      - API_KEY=${API_KEY:-change-me-in-production}
+      # Azure Speech Services
+      - AZURE_SPEECH_KEY=${AZURE_SPEECH_KEY}
+      - AZURE_SPEECH_REGION=${AZURE_SPEECH_REGION:-westeurope}
+      # Azure OpenAI
+      - AZURE_OPENAI_KEY=${AZURE_OPENAI_KEY}
+      - MODEL_AZURE_GPT4OMINI_URL=${MODEL_AZURE_GPT4OMINI_URL}
+      - MODEL_GPT35_URL=${MODEL_GPT35_URL}
+      # Optional: Promte API (alternative to Azure)
+      - PROMTE_API_KEY=${PROMTE_API_KEY}
+      - PROMTE_WHISPER=${PROMTE_WHISPER}
+      - PROMTE_4O=${PROMTE_4O}
+      # Optional: Microsoft Entra ID (for JWT auth)
+      - TENANT_ID=${TENANT_ID}
+      - CLIENT_ID=${CLIENT_ID}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root_password}
+      - MYSQL_DATABASE=translator_db
+      - MYSQL_USER=translator
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-translator_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-root_password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+    driver: local

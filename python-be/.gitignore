@@ -1,0 +1,73 @@
+*.env
+/venv
+__pycache__/venv
+src/__pycache__/
+src/routes/__pycache__/
+*.py[cod]
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+.env.*
+
+# Test coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# pytest
+.cache/
+.pytest_cache/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# pyright
+typings/
+
+# Logs and local db
+*.log
+*.sqlite3
+
+# Jupyter
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Mac OS
+.DS_Store
+
+# Docker
+*.pid
+*.tar
+
+
+deploy-models-azure-docker.txt
+
+docker-models/models/TinyLlama-TinyLlama-1.1B-Chat
+
+docker-models/.env
+docker-models/.env-real
+docker-models/chatgpt-example.txt
+docker-models/delpoy image example .txt
+docker-models/det-her-virkede.txt
+
+
+docker-models
+
+huskeliste.txt
