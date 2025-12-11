@@ -245,9 +245,9 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guid
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Commercial Version
+## V2 information
 
-This is the open-source version (V1) of KK AI Translator. For enterprise features, advanced capabilities, and commercial support, please contact us.
+This is the open-source version (V1) of KK AI Translator. To try V2, please contact us.
 
 ---
 
